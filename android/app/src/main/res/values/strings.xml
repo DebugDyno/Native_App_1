@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Groovy App</string>
+    <string name="app_name_debug">MyApp Debug</string>
+
+</resources>
