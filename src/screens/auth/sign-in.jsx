@@ -16,6 +16,7 @@ import { AuthContext } from '../../context/AuthContext'; // ✅ use your context
 
 export default function LoginScreen({ onLogin }) {
   const [emailAddress, setEmailAddress] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -58,14 +59,14 @@ export default function LoginScreen({ onLogin }) {
   const onSignInPress = async () => {
     setError('');
 
-    if (!emailAddress || !password) {
+    if (!username || !password) {
       setError('Please enter email and password.');
       return;
     }
 
     try {
       const result = await loginToAccount({
-        username: emailAddress,
+        username: username,
         password,
       });
 
@@ -81,7 +82,7 @@ export default function LoginScreen({ onLogin }) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'Home' }],
+          routes: [{ name: 'MainTabs' }],
         }),
       );
     } catch (err) {
@@ -111,17 +112,17 @@ export default function LoginScreen({ onLogin }) {
         <TextInput
           style={[styles.input, error && styles.errorInput]}
           autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Enter email"
+          value={username}
+          placeholder="Username"
           placeholderTextColor="#9A8478"
           keyboardType="email-address"
-          onChangeText={setEmailAddress}
+          onChangeText={setUsername}
         />
 
         <TextInput
           style={[styles.input, error && styles.errorInput]}
           value={password}
-          placeholder="Enter password"
+          placeholder="Password"
           placeholderTextColor="#9A8478"
           secureTextEntry
           onChangeText={setPassword}

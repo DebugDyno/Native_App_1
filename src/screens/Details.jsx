@@ -1,34 +1,25 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import React, { useContext } from "react";
 import { useNavigation, CommonActions } from "@react-navigation/native";
-import { AuthContext } from "../context/AuthContext"; // ✅ import context
+import { AuthContext } from "../context/AuthContext"; // import context
+import { COLORS } from "../constants/colors";
 
 const Details = () => {
   const navigation = useNavigation();
-  const { user, logout } = useContext(AuthContext); // ✅ get user + logout from context
+  const { user, logout: handleLogout } = useContext(AuthContext); // get user + logout from context
 
-  const handleLogout = () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Logout",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await logout(); 
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: "SignIn" }],
-              })
-            );
-
-          } catch (error) {
-            console.log("Error during logout:", error);
-          }
-        },
-      },
-    ]);
+  const handleLogoutPress = async () => {
+    try {
+      await handleLogout();
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "SignIn" }],
+        })
+      );
+    } catch (error) {
+      console.log("Error during logout:", error);
+    }
   };
 
   return (
@@ -42,7 +33,7 @@ const Details = () => {
           <Text style={styles.detail}>Username: {user.username}</Text>
           <Text style={styles.detail}>Email: {user.email}</Text>
 
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </>
@@ -59,6 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: COLORS.background
   },
   title: {
     fontSize: 24,
@@ -82,3 +74,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+

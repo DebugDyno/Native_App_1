@@ -2,6 +2,8 @@ import * as React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 
 import Home from '../screens/Home';
 import Details from '../screens/Details';
@@ -12,7 +14,46 @@ import { COLORS } from '../constants/colors';
 import { AuthContext } from '../context/AuthContext';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
+//
+// Bottom Tabs with Home + Details
+//
+function MainTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: true,
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: COLORS.background },
+        headerTintColor: COLORS.text,
+        headerTitleStyle: { fontWeight: 'bold' },
+        headerTitleAlign: 'center',
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        tabBarIcon={({ color, size }) => (
+          <Ionicons name="home-outline" size={size} color={color} />
+        )}
+      />
+      <Tab.Screen
+        name="Details"
+        component={Details}
+        tabBarIcon={({ color, size }) => (
+          <Ionicons name="list-outline" size={14} color={COLORS.primary} />
+        )}
+      />
+    </Tab.Navigator>
+  );
+}
+
+//
+// Main App Navigation
+//
 export default function AppNavigation() {
   const { loading, user } = React.useContext(AuthContext);
 
@@ -27,7 +68,7 @@ export default function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={user ? "Home" : "SignIn"}  
+        initialRouteName={user ? 'MainTabs' : 'SignIn'}
         screenOptions={{
           headerShadowVisible: false,
           headerStyle: { backgroundColor: COLORS.background },
@@ -48,9 +89,14 @@ export default function AppNavigation() {
           options={{ headerShown: false }}
         />
 
-        {/* Main Screens */}
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Details" component={Details} />
+        {/* Tabs after login */}
+        <Stack.Screen
+          name="MainTabs"
+          component={MainTabs}
+          options={{ headerShown: false }}
+        />
+
+        {/* Other Screens */}
         <Stack.Screen name="UploadImage" component={uploadImageToImgBB} />
       </Stack.Navigator>
     </NavigationContainer>
