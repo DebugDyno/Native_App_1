@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Text,
   TextInput,
@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { COLORS } from '../../constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../context/AuthContext'; // ✅ use your context
 
 export default function LoginScreen({ onLogin }) {
   const [emailAddress, setEmailAddress] = useState('');
@@ -21,6 +21,7 @@ export default function LoginScreen({ onLogin }) {
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
+  const { login } = useContext(AuthContext); // ✅ get login from context
 
   const loginToAccount = async ({ username, password }) => {
     setLoading(true);
@@ -44,7 +45,6 @@ export default function LoginScreen({ onLogin }) {
       console.log('API Response:', data);
 
       if (data.success && data?.data?.accessToken) {
-        // ✅ Successful login
         return data;
       } else {
         throw new Error(data.message || 'Invalid credentials');
@@ -69,14 +69,21 @@ export default function LoginScreen({ onLogin }) {
         password,
       });
 
-      // ✅ Save token somewhere (AsyncStorage, Redux, etc.)
-      await AsyncStorage.setItem('user', JSON.stringify(result.data.user));
-      await AsyncStorage.setItem('accessToken', result.data.accessToken);
-      await AsyncStorage.setItem('refreshToken', result.data.refreshToken);
+      // ✅ Use AuthContext login
+      await login(
+        result.data.user,
+        result.data.accessToken,
+        result.data.refreshToken,
+      );
 
-      // console.log("User logged in:", result);
-         onLogin(result.data.user);
+      console.log('User logged in successfully via context');
 
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        }),
+      );
     } catch (err) {
       setError(err.message || 'Something went wrong.');
     }

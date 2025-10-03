@@ -1,72 +1,48 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
-import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation,CommonActions } from "@react-navigation/native";
+import React, { useContext } from "react";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext"; // ✅ import context
 
-
-const Details = ({  }) => {
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
-
+const Details = () => {
   const navigation = useNavigation();
+  const { user, logout } = useContext(AuthContext); // ✅ get user + logout from context
 
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem("accessToken");
-        const user = await AsyncStorage.getItem("user");
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await logout(); 
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "SignIn" }],
+              })
+            );
 
-        setToken(token);
-        setUser(user ? JSON.parse(user) : null);
-      } catch (error) {
-        console.log("Error fetching from AsyncStorage:", error);
-      }
-    };
-
-    getToken();
-  }, []);
-
-const logout = async () => {
-  Alert.alert("Logout", "Are you sure you want to logout?", [
-    { text: "Cancel", style: "cancel" },
-    {
-      text: "Logout",
-      style: "destructive",
-      onPress: async () => {
-        try {
-          await AsyncStorage.removeItem("user");
-          await AsyncStorage.removeItem("accessToken");
-          await AsyncStorage.removeItem("refreshToken");
-
-          // Reset navigation stack and navigate to Login
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: "Home" }],
-            })
-          );
-        } catch (error) {
-          console.log("Error clearing AsyncStorage:", error);
-        }
+          } catch (error) {
+            console.log("Error during logout:", error);
+          }
+        },
       },
-    },
-  ]);
-};
+    ]);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
 
-      {!user || !token ? (
+      {!user ? (
         <Text style={styles.detail}>User is not logged in</Text>
       ) : (
         <>
           <Text style={styles.detail}>Username: {user.username}</Text>
           <Text style={styles.detail}>Email: {user.email}</Text>
-          <Text style={styles.detail} numberOfLines={1}>
-            Token: {token}
-          </Text>
 
-          <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </>

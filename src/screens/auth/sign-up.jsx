@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
   Text,
   TextInput,
@@ -9,31 +9,39 @@ import {
   KeyboardAvoidingView,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { COLORS } from "../../constants/colors";
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLORS } from '../../constants/colors';
 
 export default function SignUpScreen({ onLogin }) {
-  const [emailAddress, setEmailAddress] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [emailAddress, setEmailAddress] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
   // Email and password validation
-  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
-  const validatePassword = (password) => password.length >= 8;
+  const validateEmail = email => /\S+@\S+\.\S+/.test(email);
+  const validatePassword = password => password.length >= 8;
 
   const createAccount = async ({ username, email, password }) => {
     setLoading(true);
     try {
-      const url = "https://api.freeapi.app/api/v1/users/register";
-      const bodyData = JSON.stringify({ email, password, role: "USER", username });
+      const url = 'https://api.freeapi.app/api/v1/users/register';
+      const bodyData = JSON.stringify({
+        email,
+        password,
+        role: 'USER',
+        username,
+      });
       const options = {
-        method: "POST",
-        headers: { accept: "application/json", "content-type": "application/json" },
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
         body: bodyData,
       };
 
@@ -44,7 +52,7 @@ export default function SignUpScreen({ onLogin }) {
       if (response.ok && data?.success) {
         return data;
       } else {
-        throw new Error(data.message || "Failed to create account");
+        throw new Error(data.message || 'Failed to create account');
       }
     } catch (error) {
       setLoading(false);
@@ -53,44 +61,54 @@ export default function SignUpScreen({ onLogin }) {
   };
 
   const onSignUpPress = async () => {
-    setError("");
+    setError('');
 
     if (!validateEmail(emailAddress)) {
-      setError("Please enter a valid email address.");
+      setError('Please enter a valid email address.');
       return;
     }
 
     if (!validatePassword(password)) {
-      setError("Password must be at least 8 characters long.");
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
     try {
-      const response = await createAccount({ username, email: emailAddress, password });
+      const response = await createAccount({
+        username,
+        email: emailAddress,
+        password,
+      });
+
+      console.log(response);
 
       // Save user info and tokens to AsyncStorage
       if (response?.data) {
-        await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
-        await AsyncStorage.setItem("accessToken", response.data.accessToken);
-        await AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-
-        // Update root state to switch stack
-        if (onLogin) onLogin(response.data.user);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'SignIn' }],
+          }),
+        );
       }
     } catch (error) {
-      setError(error.message || "Something went wrong.");
+      setError(error.message || 'Something went wrong.');
     }
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={60}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={60}
+    >
       <View style={styles.container}>
         <Text style={styles.title}>Create Account</Text>
 
         {error ? (
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity onPress={() => setError("")}>
+            <TouchableOpacity onPress={() => setError('')}>
               <Text style={{ color: COLORS.textLight, marginLeft: 8 }}>✕</Text>
             </TouchableOpacity>
           </View>
@@ -128,12 +146,16 @@ export default function SignUpScreen({ onLogin }) {
           onPress={onSignUpPress}
           disabled={loading}
         >
-          {loading ? <ActivityIndicator size="small" color={COLORS.white} /> : <Text style={styles.buttonText}>Create Account</Text>}
+          {loading ? (
+            <ActivityIndicator size="small" color={COLORS.white} />
+          ) : (
+            <Text style={styles.buttonText}>Create Account</Text>
+          )}
         </TouchableOpacity>
 
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <Text style={styles.linkText}>Sign in</Text>
           </TouchableOpacity>
         </View>
@@ -143,15 +165,57 @@ export default function SignUpScreen({ onLogin }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background, padding: 20, justifyContent: "center" },
-  title: { fontSize: 32, fontWeight: "bold", color: COLORS.text, marginVertical: 15, textAlign: "center" },
-  input: { backgroundColor: COLORS.white, borderRadius: 12, padding: 15, marginBottom: 16, borderWidth: 1, borderColor: COLORS.border, fontSize: 16, color: COLORS.text },
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginVertical: 15,
+    textAlign: 'center',
+  },
+  input: {
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    fontSize: 16,
+    color: COLORS.text,
+  },
   errorInput: { borderColor: COLORS.expense },
-  button: { backgroundColor: COLORS.primary, borderRadius: 12, padding: 16, alignItems: "center", marginTop: 10, marginBottom: 20 },
-  buttonText: { color: COLORS.white, fontSize: 18, fontWeight: "600" },
-  footerContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 8 },
+  button: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  buttonText: { color: COLORS.white, fontSize: 18, fontWeight: '600' },
+  footerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+  },
   footerText: { color: COLORS.text, fontSize: 16 },
-  linkText: { color: COLORS.primary, fontSize: 16, fontWeight: "600" },
-  errorBox: { backgroundColor: "#FFE5E5", padding: 12, borderRadius: 8, borderLeftWidth: 4, borderLeftColor: COLORS.expense, marginBottom: 16, flexDirection: "row", alignItems: "center", width: "100%" },
+  linkText: { color: COLORS.primary, fontSize: 16, fontWeight: '600' },
+  errorBox: {
+    backgroundColor: '#FFE5E5',
+    padding: 12,
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.expense,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
   errorText: { color: COLORS.text, marginLeft: 8, flex: 1, fontSize: 14 },
 });
