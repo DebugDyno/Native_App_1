@@ -10,19 +10,18 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { COLORS } from '../../constants/colors';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { AlertCircle, X } from 'lucide-react-native'; // ✅ lucide-react-native icons
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { AuthContext } from '../../context/AuthContext'; // ✅ use your context
+import { AuthContext } from '../../context/AuthContext';
 
-export default function LoginScreen({ onLogin }) {
-  const [emailAddress, setEmailAddress] = useState('');
+export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
-  const { login } = useContext(AuthContext); // ✅ get login from context
+  const { login } = useContext(AuthContext);
 
   const loginToAccount = async ({ username, password }) => {
     setLoading(true);
@@ -60,21 +59,17 @@ export default function LoginScreen({ onLogin }) {
     setError('');
 
     if (!username || !password) {
-      setError('Please enter email and password.');
+      setError('Please enter username and password.');
       return;
     }
 
     try {
-      const result = await loginToAccount({
-        username: username,
-        password,
-      });
+      const result = await loginToAccount({ username, password });
 
-      // ✅ Use AuthContext login
       await login(
         result.data.user,
         result.data.accessToken,
-        result.data.refreshToken,
+        result.data.refreshToken
       );
 
       console.log('User logged in successfully via context');
@@ -83,7 +78,7 @@ export default function LoginScreen({ onLogin }) {
         CommonActions.reset({
           index: 0,
           routes: [{ name: 'MainTabs' }],
-        }),
+        })
       );
     } catch (err) {
       setError(err.message || 'Something went wrong.');
@@ -101,10 +96,10 @@ export default function LoginScreen({ onLogin }) {
 
         {error ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
+            <AlertCircle size={20} color={COLORS.expense} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError('')}>
-              <Ionicons name="close" size={20} color={COLORS.textLight} />
+              <X size={20} color={COLORS.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -115,7 +110,6 @@ export default function LoginScreen({ onLogin }) {
           value={username}
           placeholder="Username"
           placeholderTextColor="#9A8478"
-          keyboardType="email-address"
           onChangeText={setUsername}
         />
 

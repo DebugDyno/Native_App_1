@@ -8,10 +8,17 @@ import Home from '../screens/Home';
 import Details from '../screens/Details';
 import SignIn from '../screens/auth/sign-in';
 import SignUp from '../screens/auth/sign-up';
+import Player from '../screens/Player';
 import uploadImageToImgBB from '../screens/UploadImage';
 import { COLORS } from '../constants/colors';
 import { AuthContext } from '../context/AuthContext';
-import { BookUser, House } from 'lucide-react-native';
+import { BookUser, House, TvMinimal } from 'lucide-react-native';
+
+
+import { Lucide } from '@react-native-vector-icons/lucide';
+import { AntDesign } from '@react-native-vector-icons/ant-design';
+
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,19 +40,31 @@ function MainTabs() {
         tabBarInactiveTintColor: 'gray',
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'Home') {
-            return <House size={size} color={color} />;
-          } else if (route.name === 'Details') {
-            return <BookUser size={size} color={color} />;
+            // return <House size={size} color={color} />;
+            // return <Lucide name="house" size={size} color={color} />
+            return <AntDesign name="home" size={size} color={color} />
+          } else if (route.name === 'Profile') {
+            // return <BookUser size={size} color={color} />;
+            return <Lucide name="book-user" size={size} color={color} />
+          } else if (route.name === 'Player') {
+            // return <TvMinimal  size={size} color={color} />;
+            return <Lucide name="tv" size={size} color={color} />
           }
         },
       })}
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen
-        name="Details"
+        name="Profile"  
         component={Details}
         options={{ headerShown: true }}
       />
+      <Tab.Screen
+        name="Player"
+        component={Player}
+        options={{ headerShown: true }}
+      />
+      
     </Tab.Navigator>
   );
 }

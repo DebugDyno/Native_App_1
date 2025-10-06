@@ -12,13 +12,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { Ionicons } from 'react-native-vector-icons/Ionicons';
 
 import { COLORS } from '../constants/colors';
 import { CircleX } from 'lucide-react-native';
 
 // Upload function
-const uploadImageToImgBB = async (uri) => {
+const uploadImageToImgBB = async uri => {
   const base_url = `https://api.imgbb.com/1/upload?expiration=600&key=5eead99c84466452b0010c039a6a555c`;
 
   const filename = uri.split('/').pop() || 'photo.jpg';
@@ -54,7 +53,6 @@ const UploadImageScreen = () => {
       if (response.errorCode) {
         Alert.alert('Error', response.errorMessage);
       } else {
-
         console.log(response);
         const uris = response.assets.map(asset => asset.uri);
         setImages(uris);
@@ -126,7 +124,6 @@ const UploadImageScreen = () => {
                   onPress={() => removeImage(idx)}
                 >
                   <CircleX size={20} color="red" />
-                  {/* <Ionicons name="close-circle" size={22} color="red" /> */}
                 </TouchableOpacity>
               </View>
             ))

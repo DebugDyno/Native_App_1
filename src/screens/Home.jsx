@@ -1,12 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/colors';
 
-import { Feather } from '@react-native-vector-icons/feather';
-import {ArrowRight, House } from 'lucide-react-native';
+import { ArrowRight, House } from 'lucide-react-native';
 
+import { Lucide } from '@react-native-vector-icons/lucide';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -16,12 +16,42 @@ const Home = () => {
       edges={['right', 'bottom', 'left', 'top']}
       style={styles.container}
     >
-      <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-        <Text style={styles.link}>Go to Details</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 16, // move margin from Text to container
+          }}
+        >
+          <Text style={styles.link}>Go to Details</Text>
+          <Lucide
+            name="arrow-right"
+            size={24}
+            color={COLORS.text}
+            style={{ marginLeft: 8 }}
+          />
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('UploadImage')}>
-        <Text style={styles.link}>Image Upload</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 16,
+          }}
+        >
+          <Text style={styles.link}>Image Upload</Text>
+          <Lucide
+            name="arrow-right"
+            size={24}
+            color={COLORS.text}
+            style={{ marginLeft: 8 }}
+          />
+        </View>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -44,6 +74,6 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 16,
     color: COLORS.text,
-    marginTop: 16,
+    // marginTop: 16,
   },
 });
