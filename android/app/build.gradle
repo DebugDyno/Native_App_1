@@ -3,7 +3,6 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
 
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 
 /**
@@ -152,3 +151,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

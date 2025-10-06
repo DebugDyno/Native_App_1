@@ -25,7 +25,7 @@ const Home = () => {
             marginTop: 16, // move margin from Text to container
           }}
         >
-          <Text style={styles.link}>Go to Details</Text>
+          <Text style={styles.link}>Go to Profile</Text>
           <Lucide
             name="arrow-right"
             size={24}
