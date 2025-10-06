@@ -2,8 +2,11 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { COLORS } from '../constants/colors';
+
+import { Feather } from '@react-native-vector-icons/feather';
+import {ArrowRight, House } from 'lucide-react-native';
+
 
 const Home = () => {
   const navigation = useNavigation();
@@ -16,12 +19,10 @@ const Home = () => {
       <TouchableOpacity onPress={() => navigation.navigate('Details')}>
         <Text style={styles.link}>Go to Details</Text>
       </TouchableOpacity>
-        
+
       <TouchableOpacity onPress={() => navigation.navigate('UploadImage')}>
         <Text style={styles.link}>Image Upload</Text>
       </TouchableOpacity>
-
-
     </SafeAreaView>
   );
 };

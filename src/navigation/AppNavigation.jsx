@@ -3,7 +3,6 @@ import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@react-native-vector-icons/ionicons';
 
 import Home from '../screens/Home';
 import Details from '../screens/Details';
@@ -12,6 +11,7 @@ import SignUp from '../screens/auth/sign-up';
 import uploadImageToImgBB from '../screens/UploadImage';
 import { COLORS } from '../constants/colors';
 import { AuthContext } from '../context/AuthContext';
+import { BookUser, House } from 'lucide-react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,25 +31,25 @@ function MainTabs() {
         headerTitleAlign: 'center',
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: 'gray',
+        tabBarIcon: ({ color, size }) => {
+          if (route.name === 'Home') {
+            return <House size={size} color={color} />;
+          } else if (route.name === 'Details') {
+            return <BookUser size={size} color={color} />;
+          }
+        },
       })}
     >
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        tabBarIcon={({ color, size }) => (
-          <Ionicons name="home-outline" size={size} color={color} />
-        )}
-      />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen
         name="Details"
         component={Details}
-        tabBarIcon={({ color, size }) => (
-          <Ionicons name="list-outline" size={14} color={COLORS.primary} />
-        )}
+        options={{ headerShown: true }}
       />
     </Tab.Navigator>
   );
 }
+
 
 //
 // Main App Navigation

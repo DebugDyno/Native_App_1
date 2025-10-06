@@ -12,11 +12,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { Ionicons } from 'react-native-vector-icons/Ionicons';
 
 import { COLORS } from '../constants/colors';
+import { CircleX } from 'lucide-react-native';
 
 // Upload function
-const uploadImageToImgBB = async uri => {
+const uploadImageToImgBB = async (uri) => {
   const base_url = `https://api.imgbb.com/1/upload?expiration=600&key=5eead99c84466452b0010c039a6a555c`;
 
   const filename = uri.split('/').pop() || 'photo.jpg';
@@ -47,19 +49,18 @@ const UploadImageScreen = () => {
   const [uploadedUrls, setUploadedUrls] = useState([]);
 
   const pickImages = () => {
-    launchImageLibrary(
-      { mediaType: 'photo', selectionLimit: 0 }, // 0 = multiple
-      response => {
-        if (response.didCancel) return;
-        if (response.errorCode) {
-          Alert.alert('Error', response.errorMessage);
-        } else {
-          const uris = response.assets.map(asset => asset.uri);
-          setImages(uris);
-          setUploadedUrls([]);
-        }
-      },
-    );
+    launchImageLibrary({ mediaType: 'photo', selectionLimit: 0 }, response => {
+      if (response.didCancel) return;
+      if (response.errorCode) {
+        Alert.alert('Error', response.errorMessage);
+      } else {
+
+        console.log(response);
+        const uris = response.assets.map(asset => asset.uri);
+        setImages(uris);
+        setUploadedUrls([]);
+      }
+    });
   };
 
   const takePhoto = () => {
@@ -73,6 +74,10 @@ const UploadImageScreen = () => {
         setUploadedUrls([]);
       }
     });
+  };
+
+  const removeImage = index => {
+    setImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleUpload = async () => {
@@ -106,8 +111,6 @@ const UploadImageScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Text style={styles.title}>Upload Images</Text> */}
-
       <View style={styles.previewContainer}>
         <ScrollView
           horizontal
@@ -116,7 +119,16 @@ const UploadImageScreen = () => {
         >
           {images.length > 0 ? (
             images.map((uri, idx) => (
-              <Image key={idx} source={{ uri }} style={styles.previewImage} />
+              <View key={idx} style={styles.imageWrapper}>
+                <Image source={{ uri }} style={styles.previewImage} />
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => removeImage(idx)}
+                >
+                  <CircleX size={20} color="red" />
+                  {/* <Ionicons name="close-circle" size={22} color="red" /> */}
+                </TouchableOpacity>
+              </View>
             ))
           ) : (
             <TouchableOpacity onPress={pickImages}>
@@ -152,25 +164,52 @@ const UploadImageScreen = () => {
         </View>
 
         <TouchableOpacity
-          style={[styles.button, { marginTop: 15 }]}
+          style={[
+            styles.button,
+            {
+              marginTop: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+          ]}
           onPress={handleUpload}
           disabled={uploading}
         >
           {uploading ? (
-            <ActivityIndicator color={COLORS.white} />
+            <>
+              <ActivityIndicator
+                color={COLORS.white}
+                style={{ marginRight: 8 }}
+              />
+              <Text style={styles.buttonText}>Uploading...</Text>
+            </>
           ) : (
             <Text style={styles.buttonText}>Upload to ImgBB</Text>
           )}
         </TouchableOpacity>
 
         {uploadedUrls.length > 0 && (
-          <View style={styles.uploadedContainer}>
+          <View style={{ marginTop: 20, width: '100%', alignItems: 'center' }}>
             <Text style={styles.uploadedText}>Uploaded Images:</Text>
-            {uploadedUrls.map((url, idx) => (
-              <TouchableOpacity key={idx} onPress={() => openLink(url)}>
-                <Text style={styles.linkText}>{url}</Text>
-              </TouchableOpacity>
-            ))}
+            <ScrollView
+              style={{ width: '100%' }}
+              showsVerticalScrollIndicator={true}
+              contentContainerStyle={styles.uploadedPreviewContainer}
+            >
+              {uploadedUrls.map((url, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  onPress={() => openLink(url)}
+                  style={styles.uploadedItem}
+                >
+                  <Image source={{ uri: url }} style={styles.uploadedImage} />
+                  <Text style={styles.linkText} numberOfLines={1}>
+                    {url}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
         )}
 
@@ -199,12 +238,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: 20,
-  },
   previewContainer: {
     width: '100%',
     height: 120,
@@ -218,7 +251,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
     justifyContent: 'center',
-    alignContent: 'center',
     alignItems: 'center',
   },
   previewContent: {
@@ -226,12 +258,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
   },
+  imageWrapper: {
+    position: 'relative',
+    marginRight: 10,
+  },
   previewImage: {
     width: 80,
     height: 80,
     borderRadius: 12,
     resizeMode: 'cover',
-    marginRight: 10,
+  },
+  removeButton: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
   },
   textLight: { color: COLORS.textLight, fontSize: 14 },
   buttonRow: { flexDirection: 'row', gap: 10 },
@@ -268,4 +310,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   clearButtonText: { color: 'red', fontSize: 14, fontWeight: '600' },
+  uploadedPreviewContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 15,
+    paddingBottom: 30,
+    width: '100%',
+  },
+
+  uploadedItem: {
+    width: '90%',
+    backgroundColor: COLORS.card,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    shadowColor: COLORS.shadow,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+
+  uploadedImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    resizeMode: 'cover',
+    marginBottom: 6,
+  },
 });
