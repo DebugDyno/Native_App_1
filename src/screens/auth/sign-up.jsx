@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS } from '../../constants/colors';
+import { X } from 'lucide-react-native';
 
 export default function SignUpScreen({ onLogin }) {
   const [emailAddress, setEmailAddress] = useState('');
@@ -99,8 +100,8 @@ export default function SignUpScreen({ onLogin }) {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior="padding"
-      keyboardVerticalOffset={60}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <View style={styles.container}>
         <Text style={styles.title}>Create Account</Text>
@@ -109,7 +110,7 @@ export default function SignUpScreen({ onLogin }) {
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError('')}>
-              <Text style={{ color: COLORS.textLight, marginLeft: 8 }}>✕</Text>
+              <X size={20} color={COLORS.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}

@@ -108,13 +108,15 @@ android {
     }
     buildTypes {
         debug {
-            resValue "string", "app_name", "App Dev"
-            applicationIdSuffix ".debug"
-            versionNameSuffix "-DEBUG"
+            resValue "string", "app_name", "App Dev Build"
+            // applicationIdSuffix ".debug"
+            // versionNameSuffix "-DEBUG"
             signingConfig signingConfigs.debug
         }
        release {
-            resValue "string", "app_name", "Groovy"
+            resValue "string", "app_name", "App Prod Build"
+            //  applicationIdSuffix ".prod"
+            versionNameSuffix "-prod"
             signingConfig signingConfigs.release
             minifyEnabled true          // shrink/obfuscate code (optional)
             shrinkResources true        // remove unused resources

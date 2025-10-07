@@ -14,14 +14,11 @@ import { COLORS } from '../constants/colors';
 import { AuthContext } from '../context/AuthContext';
 import { BookUser, House, TvMinimal } from 'lucide-react-native';
 
-
 import { Lucide } from '@react-native-vector-icons/lucide';
 import { AntDesign } from '@react-native-vector-icons/ant-design';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 
 // import {Father} from
-
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,37 +41,35 @@ function MainTabs() {
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'Home') {
             // return <House size={size} color={color} />;
-            // return <Lucide name="house" size={size} color={color} />
+            return <Lucide name="house" size={size} color={color} />;
             // return <AntDesign name="arrow-right" size={size} color={color} />
-            return <Ionicons name="home" size={size} color={color} />
+            // return <Ionicons name="home" size={size} color={color} />
           } else if (route.name === 'Profile') {
             // return <BookUser size={size} color={color} />;
-            // return <Lucide name="book-user" size={size} color={color} />
-            return <Ionicons name="person" size={size} color={color} />
+            // return <Lucide name="person" size={size} color={color} />
+            return <Ionicons name="person" size={size} color={color} />;
           } else if (route.name === 'Player') {
             // return <TvMinimal  size={size} color={color} />;
-            // return <Lucide name="tv" size={size} color={color} />
-            return <Ionicons name="tv" size={size} color={color} />
+            return <Lucide name="tv" size={size} color={color} />;
+            // return <Ionicons name="tv" size={size} color={color} />
           }
         },
       })}
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen
-        name="Profile"  
-        component={Details}
-        options={{ headerShown: true }}
-      />
-      <Tab.Screen
         name="Player"
         component={Player}
         options={{ headerShown: true }}
       />
-      
+      <Tab.Screen
+        name="Profile"
+        component={Details}
+        options={{ headerShown: true }}
+      />
     </Tab.Navigator>
   );
 }
-
 
 //
 // Main App Navigation

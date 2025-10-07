@@ -6,7 +6,7 @@ const Player = () => {
     <View>
       <Video
         source={{
-          uri: 'https://content.jwplatform.com/manifests/yp34SRmf.m3u8',
+          uri: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
         }}
         controls={true}
         resizeMode="contain"
