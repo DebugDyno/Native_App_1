@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
-import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext'; // theme context
 import { CircleX } from 'lucide-react-native';
 
 // Upload function
@@ -46,6 +46,10 @@ const UploadImageScreen = () => {
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadedUrls, setUploadedUrls] = useState([]);
+
+  const { theme } = useTheme();
+
+  const styles = getStyles(theme);
 
   const pickImages = () => {
     launchImageLibrary({ mediaType: 'photo', selectionLimit: 0 }, response => {
@@ -154,7 +158,7 @@ const UploadImageScreen = () => {
             onPress={takePhoto}
             disabled={uploading}
           >
-            <Text style={[styles.buttonText, { color: COLORS.primary }]}>
+            <Text style={[styles.buttonText, { color: theme.primary }]}>
               Take Photo
             </Text>
           </TouchableOpacity>
@@ -176,7 +180,7 @@ const UploadImageScreen = () => {
           {uploading ? (
             <>
               <ActivityIndicator
-                color={COLORS.white}
+                color={theme.white}
                 style={{ marginRight: 8 }}
               />
               <Text style={styles.buttonText}>Uploading...</Text>
@@ -228,110 +232,112 @@ const UploadImageScreen = () => {
 
 export default UploadImageScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    alignItems: 'center',
-    padding: 20,
-  },
-  previewContainer: {
-    width: '100%',
-    height: 120,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 12,
-    marginBottom: 20,
-    backgroundColor: COLORS.card,
-    shadowColor: COLORS.shadow,
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  previewContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  imageWrapper: {
-    position: 'relative',
-    marginRight: 10,
-  },
-  previewImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 12,
-    resizeMode: 'cover',
-  },
-  removeButton: {
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-  },
-  textLight: { color: COLORS.textLight, fontSize: 14 },
-  buttonRow: { flexDirection: 'row', gap: 10 },
-  button: {
-    backgroundColor: COLORS.primary,
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  secondary: {
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-  },
-  buttonText: { color: COLORS.white, fontSize: 14, fontWeight: '600' },
-  uploadedContainer: { marginTop: 20, alignItems: 'center' },
-  uploadedText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: 5,
-  },
-  linkText: {
-    color: COLORS.primary,
-    textDecorationLine: 'underline',
-    fontSize: 14,
-  },
-  clearButton: {
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  clearButtonText: { color: 'red', fontSize: 14, fontWeight: '600' },
-  uploadedPreviewContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 15,
-    paddingBottom: 30,
-    width: '100%',
-  },
+const getStyles = theme =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.background,
+      alignItems: 'center',
+      padding: 14,
+    },
+    previewContainer: {
+      width: '100%',
+      height: 200,
+      borderWidth: 1,
+      borderColor: theme.border,
+      borderRadius: 12,
+      marginBottom: 20,
+      backgroundColor: theme.card,
+      shadowColor: theme.shadow,
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    previewContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 10,
+    },
+    imageWrapper: {
+      position: 'relative',
+      marginRight: 10,
+    },
+    previewImage: {
+      width: 120,
+      height: 120,
+      borderRadius: 12,
+      resizeMode: 'cover',
+    },
+    removeButton: {
+      position: 'absolute',
+      top: -5,
+      right: -5,
+      backgroundColor: theme.white,
+      borderRadius: 12,
+    },
+    textLight: { color: theme.textLight, fontSize: 14 },
+    buttonRow: { flexDirection: 'row', gap: 10 },
+    button: {
+      backgroundColor: theme.primary,
+      padding: 12,
+      borderRadius: 8,
+      alignItems: 'center',
+    },
+    secondary: {
+      backgroundColor: theme.white,
+      borderWidth: 1,
+      borderColor: theme.primary,
+      borderRadius: 8,
+    },
+    buttonText: { color: theme.white, fontSize: 14, fontWeight: '600' },
+    uploadedContainer: { marginTop: 20, alignItems: 'center' },
+    uploadedText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: theme.text,
+      marginBottom: 5,
+    },
+    linkText: {
+      color: theme.primary,
+      textDecorationLine: 'underline',
+      fontSize: 14,
+    },
+    clearButton: {
+      backgroundColor: theme.white,
+      borderWidth: 1,
+      borderColor: theme.primary,
+      padding: 12,
+      borderRadius: 8,
+      alignItems: 'center',
+    },
+    clearButtonText: { color: 'red', fontSize: 14, fontWeight: '600' },
+    uploadedPreviewContainer: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 15,
+      paddingBottom: 30,
+      width: '100%',
+    },
 
-  uploadedItem: {
-    width: '90%',
-    backgroundColor: COLORS.card,
-    borderRadius: 10,
-    padding: 10,
-    alignItems: 'center',
-    shadowColor: COLORS.shadow,
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
+    uploadedItem: {
+      width: '90%',
+      backgroundColor: theme.card,
+      borderRadius: 10,
+      padding: 10,
+      alignItems: 'center',
+      shadowColor: theme.shadow,
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
+    },
 
-  uploadedImage: {
-    width: '100%',
-    height: 200,
-    borderRadius: 10,
-    resizeMode: 'cover',
-    marginBottom: 6,
-  },
-});
+    uploadedImage: {
+      width: '100%',
+      height: 200,
+      borderRadius: 10,
+      resizeMode: 'cover',
+      marginBottom: 6,
+    },
+  });

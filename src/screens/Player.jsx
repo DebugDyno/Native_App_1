@@ -9,6 +9,7 @@ const Player = () => {
           uri: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
         }}
         controls={true}
+        
         resizeMode="contain"
         style={{ width: '100%', aspectRatio: 16 / 9 }}
       />

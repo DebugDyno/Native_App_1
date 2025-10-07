@@ -9,14 +9,15 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { COLORS } from '../../constants/colors';
 import { AlertCircle, X } from 'lucide-react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useTheme } from '../../context/ThemeContext';
 
+// ✅ Validation Schema
 const schema = yup.object().shape({
   username: yup.string().required('Username is required'),
   password: yup
@@ -28,10 +29,13 @@ const schema = yup.object().shape({
 export default function LoginScreen() {
   const navigation = useNavigation();
   const { login } = useContext(AuthContext);
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // React Hook Form setup
+  // ✅ React Hook Form setup
   const {
     control,
     handleSubmit,
@@ -40,7 +44,7 @@ export default function LoginScreen() {
     resolver: yupResolver(schema),
   });
 
-  // Login API 
+  // ✅ Login API
   const loginToAccount = async ({ username, password }) => {
     setLoading(true);
     try {
@@ -67,7 +71,7 @@ export default function LoginScreen() {
     }
   };
 
-  //  Handle form submission
+  // ✅ Handle form submission
   const onSubmit = async (formData) => {
     setError('');
     try {
@@ -100,10 +104,10 @@ export default function LoginScreen() {
 
         {error ? (
           <View style={styles.errorBox}>
-            <AlertCircle size={20} color={COLORS.expense} />
+            <AlertCircle size={20} color={theme.expense} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError('')}>
-              <X size={20} color={COLORS.textLight} />
+              <X size={20} color={theme.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -121,7 +125,7 @@ export default function LoginScreen() {
               autoCapitalize="none"
               value={value}
               placeholder="Username"
-              placeholderTextColor="#9A8478"
+              placeholderTextColor={theme.textLight}
               onChangeText={onChange}
             />
           )}
@@ -142,7 +146,7 @@ export default function LoginScreen() {
               ]}
               value={value}
               placeholder="Password"
-              placeholderTextColor="#9A8478"
+              placeholderTextColor={theme.textLight}
               secureTextEntry
               onChangeText={onChange}
             />
@@ -159,7 +163,7 @@ export default function LoginScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator size="small" color={COLORS.white} />
+            <ActivityIndicator size="small" color={theme.white} />
           ) : (
             <Text style={styles.buttonText}>Sign In</Text>
           )}
@@ -176,82 +180,83 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginVertical: 15,
-    textAlign: 'center',
-  },
-  input: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    fontSize: 16,
-    color: COLORS.text,
-  },
-  errorInput: {
-    borderColor: COLORS.expense,
-  },
-  fieldError: {
-    color: COLORS.expense,
-    fontSize: 13,
-    marginBottom: 8,
-    marginLeft: 4,
-  },
-  button: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: COLORS.white,
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  footerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-  },
-  footerText: {
-    color: COLORS.text,
-    fontSize: 16,
-  },
-  linkText: {
-    color: COLORS.primary,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  errorBox: {
-    backgroundColor: '#FFE5E5',
-    padding: 12,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.expense,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-  },
-  errorText: {
-    color: COLORS.text,
-    marginLeft: 8,
-    flex: 1,
-    fontSize: 14,
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.background,
+      padding: 20,
+      justifyContent: 'center',
+    },
+    title: {
+      fontSize: 32,
+      fontWeight: 'bold',
+      color: theme.text,
+      marginVertical: 15,
+      textAlign: 'center',
+    },
+    input: {
+      backgroundColor: theme.white,
+      borderRadius: 12,
+      padding: 15,
+      marginBottom: 8,
+      borderWidth: 1,
+      borderColor: theme.border,
+      fontSize: 16,
+      color: theme.text,
+    },
+    errorInput: {
+      borderColor: theme.expense,
+    },
+    fieldError: {
+      color: theme.expense,
+      fontSize: 13,
+      marginBottom: 8,
+      marginLeft: 4,
+    },
+    button: {
+      backgroundColor: theme.primary,
+      borderRadius: 12,
+      padding: 16,
+      alignItems: 'center',
+      marginTop: 10,
+      marginBottom: 20,
+    },
+    buttonText: {
+      color: theme.white,
+      fontSize: 18,
+      fontWeight: '600',
+    },
+    footerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 8,
+    },
+    footerText: {
+      color: theme.text,
+      fontSize: 16,
+    },
+    linkText: {
+      color: theme.primary,
+      fontSize: 16,
+      fontWeight: '600',
+    },
+    errorBox: {
+      backgroundColor: '#FFE5E5',
+      padding: 12,
+      borderRadius: 8,
+      borderLeftWidth: 4,
+      borderLeftColor: theme.expense,
+      marginBottom: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+    },
+    errorText: {
+      color: theme.white,
+      marginLeft: 8,
+      flex: 1,
+      fontSize: 14,
+    },
+  });

@@ -7,21 +7,23 @@ import {
   View,
   StyleSheet,
   KeyboardAvoidingView,
-  Alert,
+  Platform,
   ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext'; // ✅ use context theme
 import { X } from 'lucide-react-native';
 
 export default function SignUpScreen({ onLogin }) {
+  const { theme } = useTheme(); // ✅ get theme from context
+  const styles = getStyles(theme); // ✅ generate dynamic styles
+  const navigation = useNavigation();
+
   const [emailAddress, setEmailAddress] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const navigation = useNavigation();
 
   // Email and password validation
   const validateEmail = email => /\S+@\S+\.\S+/.test(email);
@@ -37,16 +39,16 @@ export default function SignUpScreen({ onLogin }) {
         role: 'USER',
         username,
       });
-      const options = {
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           accept: 'application/json',
           'content-type': 'application/json',
         },
         body: bodyData,
-      };
+      });
 
-      const response = await fetch(url, options);
       const data = await response.json();
       setLoading(false);
 
@@ -83,13 +85,13 @@ export default function SignUpScreen({ onLogin }) {
 
       console.log(response);
 
-      // Save user info and tokens to AsyncStorage
+      // Navigate to Sign In screen on success
       if (response?.data) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{ name: 'SignIn' }],
-          }),
+          })
         );
       }
     } catch (error) {
@@ -110,7 +112,7 @@ export default function SignUpScreen({ onLogin }) {
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError('')}>
-              <X size={20} color={COLORS.textLight} />
+              <X size={20} color={theme.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -120,7 +122,7 @@ export default function SignUpScreen({ onLogin }) {
           autoCapitalize="none"
           value={emailAddress}
           placeholder="Enter email"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           onChangeText={setEmailAddress}
           keyboardType="email-address"
         />
@@ -129,7 +131,7 @@ export default function SignUpScreen({ onLogin }) {
           style={[styles.input, error && styles.errorInput]}
           value={username}
           placeholder="Username"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           onChangeText={setUsername}
         />
 
@@ -137,7 +139,7 @@ export default function SignUpScreen({ onLogin }) {
           style={[styles.input, error && styles.errorInput]}
           value={password}
           placeholder="Enter password (min. 8 characters)"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           secureTextEntry={true}
           onChangeText={setPassword}
         />
@@ -148,7 +150,7 @@ export default function SignUpScreen({ onLogin }) {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator size="small" color={COLORS.white} />
+            <ActivityIndicator size="small" color={theme.white} />
           ) : (
             <Text style={styles.buttonText}>Create Account</Text>
           )}
@@ -165,58 +167,60 @@ export default function SignUpScreen({ onLogin }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginVertical: 15,
-    textAlign: 'center',
-  },
-  input: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    fontSize: 16,
-    color: COLORS.text,
-  },
-  errorInput: { borderColor: COLORS.expense },
-  button: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: { color: COLORS.white, fontSize: 18, fontWeight: '600' },
-  footerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-  },
-  footerText: { color: COLORS.text, fontSize: 16 },
-  linkText: { color: COLORS.primary, fontSize: 16, fontWeight: '600' },
-  errorBox: {
-    backgroundColor: '#FFE5E5',
-    padding: 12,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.expense,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-  },
-  errorText: { color: COLORS.text, marginLeft: 8, flex: 1, fontSize: 14 },
-});
+// ✅ Dynamic styles
+const getStyles = theme =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.background,
+      padding: 20,
+      justifyContent: 'center',
+    },
+    title: {
+      fontSize: 32,
+      fontWeight: 'bold',
+      color: theme.text,
+      marginVertical: 15,
+      textAlign: 'center',
+    },
+    input: {
+      backgroundColor: theme.white,
+      borderRadius: 12,
+      padding: 15,
+      marginBottom: 16,
+      borderWidth: 1,
+      borderColor: theme.border,
+      fontSize: 16,
+      color: theme.text,
+    },
+    errorInput: { borderColor: theme.expense },
+    button: {
+      backgroundColor: theme.primary,
+      borderRadius: 12,
+      padding: 16,
+      alignItems: 'center',
+      marginTop: 10,
+      marginBottom: 20,
+    },
+    buttonText: { color: theme.white, fontSize: 18, fontWeight: '600' },
+    footerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 8,
+    },
+    footerText: { color: theme.text, fontSize: 16 },
+    linkText: { color: theme.primary, fontSize: 16, fontWeight: '600' },
+    errorBox: {
+      backgroundColor: '#FFE5E5',
+      padding: 12,
+      borderRadius: 8,
+      borderLeftWidth: 4,
+      borderLeftColor: theme.expense,
+      marginBottom: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+    },
+    errorText: { color: theme.text, marginLeft: 8, flex: 1, fontSize: 14 },
+  });
