@@ -49,7 +49,7 @@ const Settings = () => {
       <Modal
         visible={modalVisible}
         transparent
-        animationType="none"
+        animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
@@ -127,13 +127,13 @@ const getStyles = theme =>
     },
     modalOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      // backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
     bottomSheet: {
       position: 'absolute',
       bottom: 0,
       width: '100%',
-      backgroundColor: theme.background,
+      backgroundColor: theme.card,
       borderTopLeftRadius: 24,
       borderTopRightRadius: 24,
       paddingVertical: 16,

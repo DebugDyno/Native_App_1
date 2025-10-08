@@ -3,6 +3,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { enableScreens } from 'react-native-screens';
 
 // # Icons
 import { BookUser, House, TvMinimal } from 'lucide-react-native';
@@ -22,7 +23,11 @@ import Player from '../screens/Player';
 import UploadImage from '../screens/UploadImage';
 import Animations from '../screens/Animations';
 import Settings from '../screens/Settings';
+import SpleshScreen from '../screens/SplashScreen';
+import AuthScreen from '../screens/auth/AuthScreen';
 
+// # Navigation Setup
+enableScreens();
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +41,7 @@ function MainTabs() {
         headerShown: true,
         headerShadowVisible: false,
         headerStyle: { backgroundColor: theme.background },
-        style: { backgroundColor: theme.background },
+        // style: { backgroundColor: theme.background },
         headerTintColor: theme.text,
         headerTitleStyle: { fontWeight: 'bold' },
         headerTitleAlign: 'center',
@@ -67,15 +72,6 @@ function MainTabs() {
 //# Main App Navigation
 export default function AppNavigation() {
   const { theme } = useTheme();
-  const { loading, user } = React.useContext(AuthContext);
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={theme.primary} />
-      </View>
-    );
-  } // Separate component so hooks can access ThemeContext
 
   const MyTheme = {
     ...DefaultTheme,
@@ -86,20 +82,29 @@ export default function AppNavigation() {
   };
 
   return (
-    <NavigationContainer theme={MyTheme}>
+    <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={user ? 'MainTabs' : 'SignIn'}
+        // initialRouteName={user ? 'MainTabs' : 'SignIn'}
+        initialRouteName="SpleshScreen"
         screenOptions={{
           // gestureEnabled: true,
           headerShadowVisible: false,
           headerStyle: { backgroundColor: theme.background },
+          style: { backgroundColor: theme.background },
+
           headerTintColor: theme.text,
           headerTitleStyle: { fontWeight: 'bold' },
           headerTitleAlign: 'center',
-          animation: 'fade_from_bottom',
+          animation: 'ios_from_right',
+
         }}
       >
         {/* Auth Screens */}
+        <Stack.Screen
+          name="AuthScreen"
+          component={AuthScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignIn"
           component={SignIn}
@@ -119,6 +124,11 @@ export default function AppNavigation() {
         />
 
         {/* Other Screens */}
+        <Stack.Screen
+          name="SpleshScreen"
+          component={SpleshScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="UploadImage" component={UploadImage} />
         <Stack.Screen name="Player" component={Player} />
         <Stack.Screen name="Animations" component={Animations} />
