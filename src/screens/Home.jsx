@@ -9,7 +9,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme as useThemeContext } from '../context/ThemeContext'; // your context
-import { ArrowRight, Diamond, Layers, Image, User } from 'lucide-react-native';
+import { ArrowRight, Diamond, Layers, Image, User,File } from 'lucide-react-native';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -25,7 +25,10 @@ const Home = () => {
     },
     {
       title: 'Media',
-      data: [{ name: 'Upload Image', icon: Image, screen: 'UploadImage' }],
+      data: [
+        { name: 'Upload Image', icon: Image, screen: 'UploadImage' },
+        { name: 'Upload Files', icon: File, screen: 'UploadFiles' },
+      ],
     },
     {
       title: 'Other',

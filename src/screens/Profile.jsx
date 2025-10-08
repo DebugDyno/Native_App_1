@@ -3,6 +3,8 @@ import React, { useContext } from 'react';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext'; // auth context
 import { useTheme } from '../context/ThemeContext'; // theme context
+import Animated, { SlideInRight, SlideOutLeft } from 'react-native-reanimated';
+
 
 const Details = () => {
   const navigation = useNavigation();

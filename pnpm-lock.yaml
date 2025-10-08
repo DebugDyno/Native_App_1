@@ -14,12 +14,18 @@ importers:
       '@react-native-async-storage/async-storage':
         specifier: ^2.2.0
         version: 2.2.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))
+      '@react-native-clipboard/clipboard':
+        specifier: ^1.16.3
+        version: 1.16.3(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)
       '@react-native-community/geolocation':
         specifier: ^3.4.0
         version: 3.4.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)
       '@react-native-community/slider':
         specifier: ^5.0.1
         version: 5.0.1
+      '@react-native-documents/picker':
+        specifier: ^10.1.7
+        version: 10.1.7(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)
       '@react-native-vector-icons/ant-design':
         specifier: ^12.3.0
         version: 12.3.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)
@@ -996,6 +1002,19 @@ packages:
     peerDependencies:
       react-native: ^0.0.0-0 || >=0.65 <1.0
 
+  '@react-native-clipboard/clipboard@1.16.3':
+    resolution: {integrity: sha512-cMIcvoZKIrShzJHEaHbTAp458R9WOv0fB6UyC7Ek4Qk561Ow/DrzmmJmH/rAZg21Z6ixJ4YSdFDC14crqIBmCQ==}
+    peerDependencies:
+      react: '>= 16.9.0'
+      react-native: '>= 0.61.5'
+      react-native-macos: '>= 0.61.0'
+      react-native-windows: '>= 0.61.0'
+    peerDependenciesMeta:
+      react-native-macos:
+        optional: true
+      react-native-windows:
+        optional: true
+
   '@react-native-community/cli-clean@20.0.0':
     resolution: {integrity: sha512-YmdNRcT+Dp8lC7CfxSDIfPMbVPEXVFzBH62VZNbYGxjyakqAvoQUFTYPgM2AyFusAr4wDFbDOsEv88gCDwR3ig==}
 
@@ -1043,6 +1062,12 @@ packages:
 
   '@react-native-community/slider@5.0.1':
     resolution: {integrity: sha512-K3JRWkIW4wQ79YJ6+BPZzp1SamoikxfPRw7Yw4B4PElEQmqZFrmH9M5LxvIo460/3QSrZF/wCgi3qizJt7g/iw==}
+
+  '@react-native-documents/picker@10.1.7':
+    resolution: {integrity: sha512-Tb8SPU+pHxrSJmDHBozSUStIPeyFHTHLrU3MW0N3sUAioLd5z+nmUdypfg5fs+Yzp7KTxVW06APe2HLB1ysLww==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
 
   '@react-native-vector-icons/ant-design@12.3.0':
     resolution: {integrity: sha512-xucB20qkC+VXTP0XnU0QaN+WDiDMj0OStJhuBamc2ISr5Ln3wbML1y9bQ+i49JwHmNaKlrORK9EoTlQZ4e4OFQ==}
@@ -5131,6 +5156,11 @@ snapshots:
       merge-options: 3.0.4
       react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0)
 
+  '@react-native-clipboard/clipboard@1.16.3(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+      react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0)
+
   '@react-native-community/cli-clean@20.0.0':
     dependencies:
       '@react-native-community/cli-tools': 20.0.0
@@ -5266,6 +5296,11 @@ snapshots:
       react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0)
 
   '@react-native-community/slider@5.0.1': {}
+
+  '@react-native-documents/picker@10.1.7(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+      react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0)
 
   '@react-native-vector-icons/ant-design@12.3.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.4(@babel/core@7.28.4))(@types/react@19.2.1)(react@19.1.0))(react@19.1.0)':
     dependencies:

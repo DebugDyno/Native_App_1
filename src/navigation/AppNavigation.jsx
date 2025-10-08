@@ -25,6 +25,7 @@ import Animations from '../screens/Animations';
 import Settings from '../screens/Settings';
 import SpleshScreen from '../screens/SplashScreen';
 import AuthScreen from '../screens/auth/AuthScreen';
+import UploadFiles from '../screens/uploadFiles';
 
 // # Navigation Setup
 enableScreens();
@@ -96,7 +97,6 @@ export default function AppNavigation() {
           headerTitleStyle: { fontWeight: 'bold' },
           headerTitleAlign: 'center',
           animation: 'ios_from_right',
-
         }}
       >
         {/* Auth Screens */}
@@ -133,7 +133,14 @@ export default function AppNavigation() {
         <Stack.Screen name="Player" component={Player} />
         <Stack.Screen name="Animations" component={Animations} />
         <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Profile" component={Profile}  />
+        <Stack.Screen
+          name="UploadFiles"
+          component={UploadFiles}
+          options={{
+            title: 'Upload Files',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
