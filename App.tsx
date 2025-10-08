@@ -52,18 +52,18 @@ function StatusBarWrapper() {
 
 // Wrapper to decide which stack to show based on auth
 function RootNavigatorWrapper() {
-  const { user, loading } = React.useContext(AuthContext);
+  // const { user, loading } = React.useContext(AuthContext);
   const { theme } = useTheme(); // ✅ inside ThemeProvider
 
-  if (loading) {
-    return (
-      <View
-        style={[styles.loadingContainer, { backgroundColor: theme.background }]}
-      >
-        <ActivityIndicator size="large" color={theme.primary} />
-      </View>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <View
+  //       style={[styles.loadingContainer, { backgroundColor: theme.background }]}
+  //     >
+  //       <ActivityIndicator size="large" color={theme.primary} />
+  //     </View>
+  //   );
+  // }
 
   return <AppNavigation />;
 }
